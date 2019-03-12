@@ -64,12 +64,21 @@ public class RabbitMqConfig {
      */
     @Bean
     public SimpleMessageListenerContainer simpleMessageListenerContainer_one(){
+    	
+    	//加载处理消息A的队列
         SimpleMessageListenerContainer simpleMessageListenerContainer = new SimpleMessageListenerContainer(connectionFactory);
+        
+        //设置接收多个队列里面的消息，这里设置接收队列A
+        //假如想一个消费者处理多个队列里面的信息可以如下设置：
+        //container.setQueues(queueA(),queueB(),queueC());
         simpleMessageListenerContainer.addQueues(queueConfig.firstQueue());
         simpleMessageListenerContainer.setExposeListenerChannel(true);
+        //设置最大的并发的消费者数量
         simpleMessageListenerContainer.setMaxConcurrentConsumers(5);
+        //最小的并发消费者的数量
         simpleMessageListenerContainer.setConcurrentConsumers(1);
-        simpleMessageListenerContainer.setAcknowledgeMode(AcknowledgeMode.MANUAL); //设置确认模式手工确认
+        //设置确认模式手工确认
+        simpleMessageListenerContainer.setAcknowledgeMode(AcknowledgeMode.MANUAL);
         return simpleMessageListenerContainer;
     }
  
